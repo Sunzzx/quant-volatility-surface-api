@@ -134,3 +134,4 @@ def calculate_all_greeks(S: float, K: float, T: float, r: float, q: float, sigma
             "option_type": option_type
         }
     }
+

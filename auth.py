@@ -78,3 +78,4 @@ def authenticate_request(headers: Dict[str, str], client_ip: str = "127.0.0.1") 
             "stripe_checkout": "https://buy.stripe.com/test_eVaeVxg7C7X6gJG144",
             "message": "Unlock unlimited requests for $29/mo with Instant API Key."
         }
+

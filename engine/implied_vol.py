@@ -108,3 +108,4 @@ def solve_implied_volatility(
         "method": "Bisection (Terminated at max_iter)",
         "pricing_error": round(abs(price_mid - market_price), 6)
     }
+

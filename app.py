@@ -5,6 +5,14 @@ Deployable as FastAPI ASGI service or standalone zero-dependency HTTP server.
 
 from __future__ import annotations
 
+import os
+import sys
+
+# Ensure current directory is in sys.path
+CURR_DIR = os.path.dirname(os.path.abspath(__file__))
+if CURR_DIR not in sys.path:
+    sys.path.insert(0, CURR_DIR)
+
 import json
 import urllib.parse
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
@@ -171,6 +179,11 @@ class StandaloneRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(json.dumps(response, indent=2).encode("utf-8"))
+
+
+# WSGI / Vercel Serverless entrypoint
+handler = StandaloneRequestHandler
+app = StandaloneRequestHandler
 
 
 def run_standalone_server(port: int = 8088):
