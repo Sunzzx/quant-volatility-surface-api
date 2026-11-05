@@ -1,0 +1,89 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Quant Volatility Surface & Institutional Derivatives Greeks API",
+    "description": "High-precision quantitative finance API delivering 1st and 2nd order Black-Scholes Greeks (Delta, Gamma, Vega, Theta, Rho, Vanna, Volga), hybrid Newton-Raphson/Brent Implied Volatility inversion, and semi-analytical Heston Stochastic Volatility surface calibration.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Ayush Kandwal (AI & Quant Researcher)",
+      "url": "https://sunzzx.github.io/ayush-kandwal-portfolio/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://quant-volatility-surface.onrender.com",
+      "description": "Production Cloud Server"
+    },
+    {
+      "url": "http://localhost:8088",
+      "description": "Local Development Server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "System Health & Capability Check",
+        "responses": {
+          "200": {
+            "description": "Service online and operational"
+          }
+        }
+      }
+    },
+    "/api/v1/greeks": {
+      "get": {
+        "summary": "Compute Full Greeks Surface (Black-Scholes-Merton)",
+        "parameters": [
+          {"name": "spot", "in": "query", "schema": {"type": "number", "default": 100.0}},
+          {"name": "strike", "in": "query", "schema": {"type": "number", "default": 100.0}},
+          {"name": "time_to_maturity", "in": "query", "schema": {"type": "number", "default": 1.0}},
+          {"name": "risk_free_rate", "in": "query", "schema": {"type": "number", "default": 0.05}},
+          {"name": "volatility", "in": "query", "schema": {"type": "number", "default": 0.20}},
+          {"name": "option_type", "in": "query", "schema": {"type": "string", "enum": ["call", "put"], "default": "call"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Exact analytical Greeks returned"
+          }
+        }
+      }
+    },
+    "/api/v1/implied-volatility": {
+      "get": {
+        "summary": "Invert Market Price to Implied Volatility",
+        "parameters": [
+          {"name": "market_price", "in": "query", "required": true, "schema": {"type": "number", "default": 10.45}},
+          {"name": "spot", "in": "query", "schema": {"type": "number", "default": 100.0}},
+          {"name": "strike", "in": "query", "schema": {"type": "number", "default": 100.0}},
+          {"name": "time_to_maturity", "in": "query", "schema": {"type": "number", "default": 1.0}},
+          {"name": "risk_free_rate", "in": "query", "schema": {"type": "number", "default": 0.05}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Implied volatility solved via hybrid Newton-Raphson/Brent"
+          }
+        }
+      }
+    },
+    "/api/v1/heston/price": {
+      "get": {
+        "summary": "Price Option under Heston Stochastic Volatility Model",
+        "parameters": [
+          {"name": "spot", "in": "query", "schema": {"type": "number", "default": 100.0}},
+          {"name": "strike", "in": "query", "schema": {"type": "number", "default": 100.0}},
+          {"name": "time_to_maturity", "in": "query", "schema": {"type": "number", "default": 1.0}},
+          {"name": "v0", "in": "query", "schema": {"type": "number", "default": 0.04}},
+          {"name": "kappa", "in": "query", "schema": {"type": "number", "default": 2.0}},
+          {"name": "theta", "in": "query", "schema": {"type": "number", "default": 0.04}},
+          {"name": "vol_of_vol", "in": "query", "schema": {"type": "number", "default": 0.3}},
+          {"name": "rho", "in": "query", "schema": {"type": "number", "default": -0.7}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Heston price computed via characteristic function numerical quadrature"
+          }
+        }
+      }
+    }
+  }
+}
