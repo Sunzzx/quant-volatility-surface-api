@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import json
 import urllib.parse
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from typing import Dict, Any
 
 from engine.greeks import calculate_all_greeks, calculate_black_scholes_price
@@ -174,7 +174,7 @@ class StandaloneRequestHandler(BaseHTTPRequestHandler):
 
 
 def run_standalone_server(port: int = 8088):
-    server = HTTPServer(("0.0.0.0", port), StandaloneRequestHandler)
+    server = ThreadingHTTPServer(("0.0.0.0", port), StandaloneRequestHandler)
     print(f"🚀 Quant Volatility Surface & Greeks API running at http://0.0.0.0:{port}")
     try:
         server.serve_forever()
